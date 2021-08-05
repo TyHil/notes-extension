@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width">
+	</head>
+	<body>
+		<style>
+		#darkMode, label {
+			cursor: pointer;
+		}
+		input[type=checkbox]:checked + label {
+			color: #dfdfdf;
+		}
+		body.dark {
+			background-color: #000;
+		}
+		</style>
+		<input type="checkbox" id="darkMode" name="darkMode">
+		<label for="darkMode">Dark Mode</label>
+		<script src="options.js"></script>
+	</body>
+</html>

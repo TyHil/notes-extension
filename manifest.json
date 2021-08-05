@@ -1,0 +1,14 @@
+{
+  "name": "Notes",
+  "permissions": ["storage"],
+  "short_name": "Notes",
+  "version": "16",
+  "description": "Notes",
+  "action": {
+	"default_icon": "images/bulb0.png",
+	"default_popup": "popup.html",
+	"default_title": "Notes"
+  },
+  "options_page": "options.html",
+  "manifest_version": 3
+}
