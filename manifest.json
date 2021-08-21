@@ -2,7 +2,7 @@
   "name": "Notes",
   "permissions": ["storage"],
   "short_name": "Notes",
-  "version": "16",
+  "version": "18",
   "description": "Notes",
   "action": {
 	"default_icon": "images/bulb0.png",
@@ -10,5 +10,15 @@
 	"default_title": "Notes"
   },
   "options_page": "options.html",
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "windows": "Ctrl+M",
+        "mac": "Command+M",
+        "chromeos": "Ctrl+M",
+        "linux": "Ctrl+M"
+      }
+    }
+  },
   "manifest_version": 3
 }
