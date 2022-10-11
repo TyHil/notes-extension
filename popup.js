@@ -1,4 +1,5 @@
 const textarea = document.getElementById("textarea");
+let darkIcon;
 
 /* Functions */
 
@@ -7,11 +8,7 @@ function adjustHeight() {
     textarea.style.height = Math.max((textarea.scrollHeight), 25) + "px";
 }
 function setIcon() {
-	if (textarea.value === "") {
-		chrome.action.setIcon({path:"images/bulb0.png"});
-	} else {
-		chrome.action.setIcon({path:"images/bulb1.png"});
-	}
+	chrome.action.setIcon({path:"images/bulb" + (textarea.value === "" ? "Off" : "On") + (darkIcon ? "Dark" : "Light") + ".png"});
 }
 
 
@@ -24,10 +21,20 @@ chrome.storage.sync.get("note", function(result) {
 		textarea.value = result["note"];
 	}
 });
+chrome.storage.sync.get("place", function(result) {
+	if (typeof result["place"] === "undefined") {
+		textarea.selectionStart = textarea.selectionEnd = 0;
+	} else {
+		textarea.selectionStart = textarea.selectionEnd = result["place"];
+	}
+});
 chrome.storage.sync.get("darkMode", function(result) {
 	if (typeof result["darkMode"] !== "undefined" && result["darkMode"]) {
 		textarea.classList.add("dark");
 	}
+});
+chrome.storage.sync.get("darkIcon", function(result) {
+	darkIcon = typeof result["darkIcon"] !== "undefined" && result["darkIcon"];
 });
 textarea.addEventListener("keydown", adjustHeight);
 textarea.addEventListener("keyup", function() {
@@ -79,8 +86,7 @@ textarea.addEventListener("keyup", function() {
 								ans = 'use "/" + any command:\n  solve <equation> = simplification and expansion of equation\n  rand <low> <high> = random number between low and high\n  deriv <equation> = derivative of equation with respect to x\n  d2h, h2d, d2b, b2d, b2h, or h2b <number> = base conversion of number\n  Note: trig functions use radians. Multiply by 3.14/180 to use degrees';
 						}
 						textarea.value = textarea.value.substring(0, i) + textarea.value.substring(i + 1, k + 1) + " " + ans + textarea.value.substring(k + 1, textarea.value.length);
-						textarea.selectionStart = k + ans.toString().length + 1;
-						textarea.selectionEnd = k + ans.toString().length + 1;
+						textarea.selectionStart = textarea.selectionEnd = k + ans.toString().length + 1;
 						adjustHeight();
 						break check;
 					}
@@ -89,6 +95,10 @@ textarea.addEventListener("keyup", function() {
 		}
 	}
 	chrome.storage.sync.set({["note"]: textarea.value});
+	chrome.storage.sync.set({["place"]: textarea.selectionStart});
+});
+textarea.addEventListener("click", function() {
+	chrome.storage.sync.set({["place"]: textarea.selectionStart});
 });
 
 

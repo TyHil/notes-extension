@@ -2,10 +2,10 @@
   "name": "Notes",
   "permissions": ["storage"],
   "short_name": "Notes",
-  "version": "18",
+  "version": "20",
   "description": "Notes",
   "action": {
-	"default_icon": "images/bulb0.png",
+	"default_icon": "images/bulbOnLight.png",
 	"default_popup": "popup.html",
 	"default_title": "Notes"
   },

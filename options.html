@@ -6,18 +6,21 @@
 	</head>
 	<body>
 		<style>
-		#darkMode, label {
-			cursor: pointer;
-		}
-		input[type=checkbox]:checked + label {
-			color: #dfdfdf;
-		}
-		body.dark {
-			background-color: #000;
-		}
+			#darkMode, label {
+				cursor: pointer;
+			}
+			#darkMode:checked ~ label {
+				color: #dfdfdf;
+			}
+			body.dark {
+				background-color: #000;
+			}
 		</style>
 		<input type="checkbox" id="darkMode" name="darkMode">
 		<label for="darkMode">Dark Mode</label>
+		<br>
+		<input type="checkbox" id="darkIcon" name="darkIcon">
+		<label for="darkIcon">Dark Mode Icon</label>
 		<script src="options.js"></script>
 	</body>
 </html>
