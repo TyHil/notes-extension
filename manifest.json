@@ -2,7 +2,7 @@
   "name": "Notes",
   "permissions": ["storage"],
   "short_name": "Notes",
-  "version": "20",
+  "version": "22",
   "description": "Notes",
   "action": {
 	"default_icon": "images/bulbOnLight.png",
