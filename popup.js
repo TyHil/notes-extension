@@ -124,7 +124,7 @@ textarea.addEventListener('click', function() {
 	chrome.storage.local.set({['placeDate']: Date.now()});
 });
 setInterval(function() {
-	if (!saved && Date.now() - lastKey > 1000) {
+	if (!saved && Date.now() - lastKey > 2000) {
 		saved = 1;
 		chrome.storage.sync.set({['note']: textarea.value});
 		chrome.storage.sync.set({['noteDate']: Date.now()});
