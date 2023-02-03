@@ -11,8 +11,8 @@ function adjustHeight() {
 	textarea.style.height = '5px';
     textarea.style.height = Math.max((textarea.scrollHeight), 25) + 'px';
 }
-function setIcon() {
-	chrome.action.setIcon({path:'images/bulb' + (textarea.value === '' ? 'Off' : 'On') + (darkIcon ? 'Dark' : 'Light') + '.png'});
+function setIcon(value = textarea.value) {
+	chrome.action.setIcon({path:'images/bulb' + (value === '' ? 'Off' : 'On') + (darkIcon ? 'Dark' : 'Light') + '.png'});
 }
 
 
@@ -24,30 +24,40 @@ chrome.storage.sync.get('darkMode', function(result) {
 		textarea.classList.add('dark');
 	}
 });
-chrome.storage.sync.get('darkIcon', function(result) {
-	darkIcon = typeof result['darkIcon'] !== 'undefined' && result['darkIcon'];
-});
-function loadData(name, nameDate) {
+function loadData(name, nameDate, fallback) {
 	return Promise.all([chrome.storage.local.get([name, nameDate]), chrome.storage.sync.get([name, nameDate])]).then(result => {
 		if (typeof result[0][name] === 'undefined' && typeof result[1][name] === 'undefined') {
-			return 'You can add your notes here!';
+			return fallback;
 		} else if (typeof result[0][name] === 'undefined' || typeof result[0][nameDate] === 'undefined') {
+			chrome.storage.local.set({[name]: result[0][name]});
+			chrome.storage.local.set({[nameDate]: result[0][nameDate]});
 			return result[1][name];
 		} else if (typeof result[1][name] === 'undefined' || typeof result[1][nameDate] === 'undefined') {
+			chrome.storage.sync.set({[name]: result[0][name]});
+			chrome.storage.sync.set({[nameDate]: result[0][nameDate]});
 			return result[0][name];
 		} else if (result[0][nameDate] > result[1][nameDate]) {
+			chrome.storage.sync.set({[name]: result[0][name]});
+			chrome.storage.sync.set({[nameDate]: result[0][nameDate]});
 			return result[0][name];
 		} else {
+			chrome.storage.local.set({[name]: result[0][name]});
+			chrome.storage.local.set({[nameDate]: result[0][nameDate]});
 			return result[1][name];
 		}
 		
 	});
 }
-loadData('note', 'noteDate', 'value').then(value => {
+let noteContentLoaded = loadData('note', 'noteDate', 'You can add your notes here!');
+noteContentLoaded.then(value => {
 	textarea.value = value;
+	adjustHeight();
 });
-loadData('place', 'placeDate', 'selectionStart').then(value => {
-	textarea.selectionStart = textarea.selectionEnd = value;
+loadData('selectionStart', 'selectionDate', 0).then(value => textarea.selectionStart = value);
+loadData('selectionEnd', 'selectionDate', 0).then(value => textarea.selectionEnd = value);
+Promise.all([noteContentLoaded, chrome.storage.sync.get('darkIcon')]).then(result => {
+	darkIcon = typeof result[1]['darkIcon'] !== 'undefined' && result[1]['darkIcon'];
+	setIcon(result[0]);
 });
 
 
@@ -101,10 +111,11 @@ textarea.addEventListener('keyup', function(e) {
 								ans = parseInt(textarea.value.substring(i + 5, k - 1), 16).toString(2);
 								break;
 							case 9://help = list of commands
-								ans = 'use '/' + any command:\n  solve <equation> = simplification and expansion of equation\n  rand <low> <high> = random number between low and high\n  deriv <equation> = derivative of equation with respect to x\n  d2h, h2d, d2b, b2d, b2h, or h2b <number> = base conversion of number\n  Note: trig functions use radians. Multiply by 3.14/180 to use degrees';
+								ans = 'use "/" + any command:\n  solve <equation> = simplification and expansion of equation\n  rand <low> <high> = random number between low and high\n  deriv <equation> = derivative of equation with respect to x\n  d2h, h2d, d2b, b2d, b2h, or h2b <number> = base conversion of number\n  Note: trig functions use radians. Multiply by 3.14/180 to use degrees';
 						}
 						textarea.value = textarea.value.substring(0, i) + textarea.value.substring(i + 1, k + 1) + ' ' + ans + textarea.value.substring(k + 1, textarea.value.length);
-						textarea.selectionStart = textarea.selectionEnd = k + ans.toString().length + 1;
+						textarea.selectionStart = k + 1;
+						textarea.selectionEnd = k + ans.toString().length + 1;
 						adjustHeight();
 						break check;
 					}
@@ -114,29 +125,24 @@ textarea.addEventListener('keyup', function(e) {
 	}
 	chrome.storage.local.set({['note']: textarea.value});
 	chrome.storage.local.set({['noteDate']: Date.now()});
-	chrome.storage.local.set({['place']: textarea.selectionStart});
-	chrome.storage.local.set({['placeDate']: Date.now()});
+	chrome.storage.local.set({['selectionStart']: textarea.selectionStart});
+	chrome.storage.local.set({['selectionEnd']: textarea.selectionEnd});
+	chrome.storage.local.set({['selectionDate']: Date.now()});
 	lastKey = Date.now();
 	saved = 0;
 });
 textarea.addEventListener('click', function() {
-	chrome.storage.local.set({['place']: textarea.selectionStart});
-	chrome.storage.local.set({['placeDate']: Date.now()});
+	chrome.storage.local.set({['selectionStart']: textarea.selectionStart});
+	chrome.storage.local.set({['selectionEnd']: textarea.selectionEnd});
+	chrome.storage.local.set({['selectionDate']: Date.now()});
 });
 setInterval(function() {
-	if (!saved && Date.now() - lastKey > 2000) {
+	if (!saved && Date.now() - lastKey > 500) {
 		saved = 1;
 		chrome.storage.sync.set({['note']: textarea.value});
 		chrome.storage.sync.set({['noteDate']: Date.now()});
-		chrome.storage.sync.set({['place']: textarea.selectionStart});
-		chrome.storage.sync.set({['placeDate']: Date.now()});
+		chrome.storage.sync.set({['selectionStart']: textarea.selectionStart});
+		chrome.storage.sync.set({['selectionEnd']: textarea.selectionEnd});
+		chrome.storage.sync.set({['selectionDate']: Date.now()});
 	}
-}, 1000);
-
-
-/* Run on Load */
-
-window.onload = (event) => {
-	adjustHeight();
-	setIcon();
-};
+}, 500);
