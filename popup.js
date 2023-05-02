@@ -30,20 +30,20 @@ function loadData(name, nameDate, fallback) {
 		if (typeof result[0][name] === 'undefined' && typeof result[1][name] === 'undefined') {
 			return fallback;
 		} else if (typeof result[0][name] === 'undefined' || typeof result[0][nameDate] === 'undefined') {
-			chrome.storage.local.set({[name]: result[0][name]});
-			chrome.storage.local.set({[nameDate]: result[0][nameDate]});
+			chrome.storage.local.set({name: result[0][name]});
+			chrome.storage.local.set({nameDate: result[0][nameDate]});
 			return result[1][name];
 		} else if (typeof result[1][name] === 'undefined' || typeof result[1][nameDate] === 'undefined') {
-			chrome.storage.sync.set({[name]: result[0][name]});
-			chrome.storage.sync.set({[nameDate]: result[0][nameDate]});
+			chrome.storage.sync.set({name: result[0][name]});
+			chrome.storage.sync.set({nameDate: result[0][nameDate]});
 			return result[0][name];
 		} else if (result[0][nameDate] > result[1][nameDate]) {
-			chrome.storage.sync.set({[name]: result[0][name]});
-			chrome.storage.sync.set({[nameDate]: result[0][nameDate]});
+			chrome.storage.sync.set({name: result[0][name]});
+			chrome.storage.sync.set({nameDate: result[0][nameDate]});
 			return result[0][name];
 		} else {
-			chrome.storage.local.set({[name]: result[0][name]});
-			chrome.storage.local.set({[nameDate]: result[0][nameDate]});
+			chrome.storage.local.set({name: result[0][name]});
+			chrome.storage.local.set({nameDate: result[0][nameDate]});
 			return result[1][name];
 		}
 		
@@ -132,28 +132,28 @@ textarea.addEventListener('keyup', function(e) {
 			}
 		}
 	}
-	chrome.storage.local.set({['note']: textarea.value});
-	chrome.storage.local.set({['noteDate']: Date.now()});
-	chrome.storage.local.set({['selectionStart']: textarea.selectionStart});
-	chrome.storage.local.set({['selectionEnd']: textarea.selectionEnd});
-	chrome.storage.local.set({['selectionDate']: Date.now()});
+	chrome.storage.local.set({'note': textarea.value});
+	chrome.storage.local.set({'noteDate': Date.now()});
+	chrome.storage.local.set({'selectionStart': textarea.selectionStart});
+	chrome.storage.local.set({'selectionEnd': textarea.selectionEnd});
+	chrome.storage.local.set({'selectionDate': Date.now()});
 	lastKey = Date.now();
 	saved = 0;
 });
 
 textarea.addEventListener('click', function() {
-	chrome.storage.local.set({['selectionStart']: textarea.selectionStart});
-	chrome.storage.local.set({['selectionEnd']: textarea.selectionEnd});
-	chrome.storage.local.set({['selectionDate']: Date.now()});
+	chrome.storage.local.set({'selectionStart': textarea.selectionStart});
+	chrome.storage.local.set({'selectionEnd': textarea.selectionEnd});
+	chrome.storage.local.set({'selectionDate': Date.now()});
 });
 
 setInterval(function() {
 	if (!saved && Date.now() - lastKey > 500) {
 		saved = 1;
-		chrome.storage.sync.set({['note']: textarea.value});
-		chrome.storage.sync.set({['noteDate']: Date.now()});
-		chrome.storage.sync.set({['selectionStart']: textarea.selectionStart});
-		chrome.storage.sync.set({['selectionEnd']: textarea.selectionEnd});
-		chrome.storage.sync.set({['selectionDate']: Date.now()});
+		chrome.storage.sync.set({'note': textarea.value});
+		chrome.storage.sync.set({'noteDate': Date.now()});
+		chrome.storage.sync.set({'selectionStart': textarea.selectionStart});
+		chrome.storage.sync.set({'selectionEnd': textarea.selectionEnd});
+		chrome.storage.sync.set({'selectionDate': Date.now()});
 	}
 }, 500);

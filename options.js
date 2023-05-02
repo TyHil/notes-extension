@@ -1,4 +1,4 @@
-/*Run On Open*/
+/* Run On Open */
 
 const darkMode = document.getElementById('darkMode');
 chrome.storage.sync.get('darkMode', function(result) {
@@ -17,7 +17,7 @@ darkMode.addEventListener('click', function() {
 	} else {
 		document.body.classList.remove('dark');
 	}
-	chrome.storage.sync.set({['darkMode']: (darkMode.checked ? 1 : 0)});
+	chrome.storage.sync.set({'darkMode': (darkMode.checked ? 1 : 0)});
 });
 
 const darkIcon = document.getElementById('darkIcon');
@@ -48,7 +48,7 @@ function loadData(name, nameDate, fallback) {
 	});
 }
 darkIcon.addEventListener('click', function() {
-	chrome.storage.sync.set({['darkIcon']: (darkIcon.checked ? 1 : 0)});
+	chrome.storage.sync.set({'darkIcon': (darkIcon.checked ? 1 : 0)});
 	loadData('note', 'noteDate', 'You can add your notes here!').then(value => {
 		chrome.action.setIcon({path:'images/bulb' + ((value === '') ? 'Off' : 'On') + (darkIcon.checked ? 'Dark' : 'Light') + '.png'});
 	});
