@@ -24,6 +24,7 @@ chrome.storage.sync.get('darkMode', function(result) {
 		textarea.classList.add('dark');
 	}
 });
+
 function loadData(name, nameDate, fallback) {
 	return Promise.all([chrome.storage.local.get([name, nameDate]), chrome.storage.sync.get([name, nameDate])]).then(result => {
 		if (typeof result[0][name] === 'undefined' && typeof result[1][name] === 'undefined') {
@@ -48,13 +49,21 @@ function loadData(name, nameDate, fallback) {
 		
 	});
 }
-let noteContentLoaded = loadData('note', 'noteDate', 'You can add your notes here!');
+
+const noteContentLoaded = loadData('note', 'noteDate', 'You can add your notes here!');
 noteContentLoaded.then(value => {
 	textarea.value = value;
 	adjustHeight();
 });
-loadData('selectionStart', 'selectionDate', 0).then(value => textarea.selectionStart = value);
-loadData('selectionEnd', 'selectionDate', 0).then(value => textarea.selectionEnd = value);
+
+const selectionStartLoaded = loadData('selectionStart', 'selectionDate', 0).then(value => textarea.selectionStart = value);
+const selectionEndLoaded = loadData('selectionEnd', 'selectionDate', 0).then(value => textarea.selectionEnd = value);
+
+Promise.all([noteContentLoaded, selectionStartLoaded, selectionEndLoaded]).then(result => {
+	textarea.blur();
+  textarea.focus();
+});
+
 Promise.all([noteContentLoaded, chrome.storage.sync.get('darkIcon')]).then(result => {
 	darkIcon = typeof result[1]['darkIcon'] !== 'undefined' && result[1]['darkIcon'];
 	setIcon(result[0]);
@@ -131,11 +140,13 @@ textarea.addEventListener('keyup', function(e) {
 	lastKey = Date.now();
 	saved = 0;
 });
+
 textarea.addEventListener('click', function() {
 	chrome.storage.local.set({['selectionStart']: textarea.selectionStart});
 	chrome.storage.local.set({['selectionEnd']: textarea.selectionEnd});
 	chrome.storage.local.set({['selectionDate']: Date.now()});
 });
+
 setInterval(function() {
 	if (!saved && Date.now() - lastKey > 500) {
 		saved = 1;
