@@ -2,7 +2,7 @@
 
 ## Description
 
-A Chrome extension popup window that can be used to write down quick notes and make calculations.
+A Chrome and Firefox extension popup window that can be used to write down quick notes and make calculations.
 
 Type "/help =" in the notes field for this list of commands:
 ```
@@ -13,9 +13,11 @@ Type "/help =" in the notes field for this list of commands:
 Note: trig functions use radians. Multiply by 3.14/180 to use degrees
 ```
 
-## Chrome Web Store
+## Web Stores
 
 [Chrome Web Store Listing](https://chrome.google.com/webstore/detail/notes/mmpafhpdjeiogbfmncenmkbemhacfcge)
+
+[Firefox Add-ons Listing](https://addons.mozilla.org/en-US/firefox/addon/notes-extension/)
 
 ## License
 
