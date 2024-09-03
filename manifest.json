@@ -2,7 +2,7 @@
   "name": "Notes",
   "permissions": ["storage"],
   "short_name": "Notes",
-  "version": "25",
+  "version": "26",
   "description": "Notes",
   "action": {
     "default_icon": "images/bulbOnLight.png",
@@ -13,12 +13,17 @@
   "commands": {
     "_execute_action": {
       "suggested_key": {
-        "windows": "Ctrl+M",
-        "mac": "Command+M",
-        "chromeos": "Ctrl+M",
-        "linux": "Ctrl+M"
+        "windows": "Ctrl+Q",
+        "mac": "Command+Q",
+        "chromeos": "Ctrl+Q",
+        "linux": "Ctrl+Q"
       }
     }
   },
-  "manifest_version": 3
+  "manifest_version": 3,
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "notes@tylergordonhill.com"
+    }
+  }
 }

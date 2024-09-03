@@ -1,7 +1,9 @@
+const realBrowser = typeof browser !== 'undefined' ? browser : chrome;
+
 /* Run On Open */
 
 const darkMode = document.getElementById('darkMode');
-chrome.storage.sync.get('darkMode', function(result) {
+realBrowser.storage.sync.get('darkMode', function(result) {
 	if (typeof result['darkMode'] !== 'undefined') {
 		if (result['darkMode']) {
 			darkMode.checked = true;
@@ -17,11 +19,11 @@ darkMode.addEventListener('click', function() {
 	} else {
 		document.body.classList.remove('dark');
 	}
-	chrome.storage.sync.set({'darkMode': (darkMode.checked ? 1 : 0)});
+	realBrowser.storage.sync.set({'darkMode': (darkMode.checked ? 1 : 0)});
 });
 
 const darkIcon = document.getElementById('darkIcon');
-chrome.storage.sync.get('darkIcon', function(result) {
+realBrowser.storage.sync.get('darkIcon', function(result) {
 	if (typeof result['darkIcon'] !== 'undefined') {
 		if (result['darkIcon']) {
 			darkIcon.checked = true;
@@ -32,7 +34,7 @@ chrome.storage.sync.get('darkIcon', function(result) {
 	}
 });
 function loadData(name, nameDate, fallback) {
-	return Promise.all([chrome.storage.local.get([name, nameDate]), chrome.storage.sync.get([name, nameDate])]).then(result => {
+	return Promise.all([realBrowser.storage.local.get([name, nameDate]), realBrowser.storage.sync.get([name, nameDate])]).then(result => {
 		if (typeof result[0][name] === 'undefined' && typeof result[1][name] === 'undefined') {
 			return fallback;
 		} else if (typeof result[0][name] === 'undefined' || typeof result[0][nameDate] === 'undefined') {
@@ -48,8 +50,8 @@ function loadData(name, nameDate, fallback) {
 	});
 }
 darkIcon.addEventListener('click', function() {
-	chrome.storage.sync.set({'darkIcon': (darkIcon.checked ? 1 : 0)});
+	realBrowser.storage.sync.set({'darkIcon': (darkIcon.checked ? 1 : 0)});
 	loadData('note', 'noteDate', 'You can add your notes here!').then(value => {
-		chrome.action.setIcon({path:'images/bulb' + ((value === '') ? 'Off' : 'On') + (darkIcon.checked ? 'Dark' : 'Light') + '.png'});
+		realBrowser.action.setIcon({path:'images/bulb' + ((value === '') ? 'Off' : 'On') + (darkIcon.checked ? 'Dark' : 'Light') + '.png'});
 	});
 });

@@ -1,3 +1,5 @@
+const realBrowser = typeof browser !== 'undefined' ? browser : chrome;
+
 const textarea = document.getElementById('textarea');
 let darkIcon;
 let lastKey = Date.now();
@@ -12,38 +14,38 @@ function adjustHeight() {
     textarea.style.height = Math.max((textarea.scrollHeight), 25) + 'px';
 }
 function setIcon(value = textarea.value) {
-	chrome.action.setIcon({path:'images/bulb' + (value === '' ? 'Off' : 'On') + (darkIcon ? 'Dark' : 'Light') + '.png'});
+	realBrowser.action.setIcon({path:'images/bulb' + (value === '' ? 'Off' : 'On') + (darkIcon ? 'Dark' : 'Light') + '.png'});
 }
 
 
 
 /* Load Data */
 
-chrome.storage.sync.get('darkMode', function(result) {
+realBrowser.storage.sync.get('darkMode', function(result) {
 	if (typeof result['darkMode'] !== 'undefined' && result['darkMode']) {
 		textarea.classList.add('dark');
 	}
 });
 
 function loadData(name, nameDate, fallback) {
-	return Promise.all([chrome.storage.local.get([name, nameDate]), chrome.storage.sync.get([name, nameDate])]).then(result => {
+	return Promise.all([realBrowser.storage.local.get([name, nameDate]), realBrowser.storage.sync.get([name, nameDate])]).then(result => {
 		if (typeof result[0][name] === 'undefined' && typeof result[1][name] === 'undefined') {
 			return fallback;
 		} else if (typeof result[0][name] === 'undefined' || typeof result[0][nameDate] === 'undefined') {
-			chrome.storage.local.set({name: result[0][name]});
-			chrome.storage.local.set({nameDate: result[0][nameDate]});
+			realBrowser.storage.local.set({name: result[0][name]});
+			realBrowser.storage.local.set({nameDate: result[0][nameDate]});
 			return result[1][name];
 		} else if (typeof result[1][name] === 'undefined' || typeof result[1][nameDate] === 'undefined') {
-			chrome.storage.sync.set({name: result[0][name]});
-			chrome.storage.sync.set({nameDate: result[0][nameDate]});
+			realBrowser.storage.sync.set({name: result[0][name]});
+			realBrowser.storage.sync.set({nameDate: result[0][nameDate]});
 			return result[0][name];
 		} else if (result[0][nameDate] > result[1][nameDate]) {
-			chrome.storage.sync.set({name: result[0][name]});
-			chrome.storage.sync.set({nameDate: result[0][nameDate]});
+			realBrowser.storage.sync.set({name: result[0][name]});
+			realBrowser.storage.sync.set({nameDate: result[0][nameDate]});
 			return result[0][name];
 		} else {
-			chrome.storage.local.set({name: result[0][name]});
-			chrome.storage.local.set({nameDate: result[0][nameDate]});
+			realBrowser.storage.local.set({name: result[0][name]});
+			realBrowser.storage.local.set({nameDate: result[0][nameDate]});
 			return result[1][name];
 		}
 		
@@ -64,7 +66,7 @@ Promise.all([noteContentLoaded, selectionStartLoaded, selectionEndLoaded]).then(
   textarea.focus();
 });
 
-Promise.all([noteContentLoaded, chrome.storage.sync.get('darkIcon')]).then(result => {
+Promise.all([noteContentLoaded, realBrowser.storage.sync.get('darkIcon')]).then(result => {
 	darkIcon = typeof result[1]['darkIcon'] !== 'undefined' && result[1]['darkIcon'];
 	setIcon(result[0]);
 });
@@ -132,28 +134,28 @@ textarea.addEventListener('keyup', function(e) {
 			}
 		}
 	}
-	chrome.storage.local.set({'note': textarea.value});
-	chrome.storage.local.set({'noteDate': Date.now()});
-	chrome.storage.local.set({'selectionStart': textarea.selectionStart});
-	chrome.storage.local.set({'selectionEnd': textarea.selectionEnd});
-	chrome.storage.local.set({'selectionDate': Date.now()});
+	realBrowser.storage.local.set({'note': textarea.value});
+	realBrowser.storage.local.set({'noteDate': Date.now()});
+	realBrowser.storage.local.set({'selectionStart': textarea.selectionStart});
+	realBrowser.storage.local.set({'selectionEnd': textarea.selectionEnd});
+	realBrowser.storage.local.set({'selectionDate': Date.now()});
 	lastKey = Date.now();
 	saved = 0;
 });
 
 textarea.addEventListener('click', function() {
-	chrome.storage.local.set({'selectionStart': textarea.selectionStart});
-	chrome.storage.local.set({'selectionEnd': textarea.selectionEnd});
-	chrome.storage.local.set({'selectionDate': Date.now()});
+	realBrowser.storage.local.set({'selectionStart': textarea.selectionStart});
+	realBrowser.storage.local.set({'selectionEnd': textarea.selectionEnd});
+	realBrowser.storage.local.set({'selectionDate': Date.now()});
 });
 
 setInterval(function() {
 	if (!saved && Date.now() - lastKey > 500) {
 		saved = 1;
-		chrome.storage.sync.set({'note': textarea.value});
-		chrome.storage.sync.set({'noteDate': Date.now()});
-		chrome.storage.sync.set({'selectionStart': textarea.selectionStart});
-		chrome.storage.sync.set({'selectionEnd': textarea.selectionEnd});
-		chrome.storage.sync.set({'selectionDate': Date.now()});
+		realBrowser.storage.sync.set({'note': textarea.value});
+		realBrowser.storage.sync.set({'noteDate': Date.now()});
+		realBrowser.storage.sync.set({'selectionStart': textarea.selectionStart});
+		realBrowser.storage.sync.set({'selectionEnd': textarea.selectionEnd});
+		realBrowser.storage.sync.set({'selectionDate': Date.now()});
 	}
 }, 500);
