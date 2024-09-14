@@ -5,6 +5,7 @@
 A Chrome and Firefox extension popup window that can be used to write down quick notes and make calculations.
 
 Type "/help =" in the notes field for this list of commands:
+
 ```
 /solve <equation> = simplification and expansion of equation
 /rand <low> <high> = random number between low and high

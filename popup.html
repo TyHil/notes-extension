@@ -1,47 +1,47 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width">
-	</head>
-	<body>
-		<style>
-			body {
-				padding: 0;
-				margin: 0;
-			}
-			#textarea-wrapper {
-				width: 600px;
-				max-height: 550px;
-				overflow-y: auto;
-				margin: 0;
-				padding: 0;
-				background-image: url("images/lines.png"), url("images/paper.png");
-				background-repeat: repeat;
-				background-attachment: local;
-			}
-			textarea {
-				background: none;
-				width: calc(100% - 35px);
-				height: 100%;
-				resize: none;
-				outline: none;
-				border: 0;
-				padding: 1px 0px 0px 35px;
-				margin: 0;
-				font-size: 14px;
-				line-height: 20px;
-				overflow-wrap: break-word;
-				display: block;
-			}
-			textarea.dark {
-				filter: invert(1);
-			}
-		</style>
-		<div id="textarea-wrapper">
-			<textarea id="textarea" autofocus></textarea>
-		</div>
-		<script src="math.min.js"></script>
-		<script src="popup.js"></script>
-	</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+  </head>
+  <body>
+    <style>
+      body {
+        padding: 0;
+        margin: 0;
+      }
+      #textarea-wrapper {
+        width: 600px;
+        max-height: 550px;
+        overflow-y: auto;
+        margin: 0;
+        padding: 0;
+        background-image: url('images/lines.png'), url('images/paper.png');
+        background-repeat: repeat;
+        background-attachment: local;
+      }
+      textarea {
+        background: none;
+        width: calc(100% - 35px);
+        height: 100%;
+        resize: none;
+        outline: none;
+        border: 0;
+        padding: 1px 0px 0px 35px;
+        margin: 0;
+        font-size: 14px;
+        line-height: 20px;
+        overflow-wrap: break-word;
+        display: block;
+      }
+      textarea.dark {
+        filter: invert(1);
+      }
+    </style>
+    <div id="textarea-wrapper">
+      <textarea id="textarea" autofocus></textarea>
+    </div>
+    <script src="lib/math.min.js"></script>
+    <script src="popup.js"></script>
+  </body>
 </html>
