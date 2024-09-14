@@ -10,20 +10,12 @@
         padding: 0;
         margin: 0;
       }
-      #textarea-wrapper {
-        width: 600px;
-        max-height: 550px;
-        overflow-y: auto;
-        margin: 0;
-        padding: 0;
+      textarea {
         background-image: url('images/lines.png'), url('images/paper.png');
         background-repeat: repeat;
         background-attachment: local;
-      }
-      textarea {
-        background: none;
-        width: calc(100% - 35px);
-        height: 100%;
+        width: 600px;
+        max-height: 550px;
         resize: none;
         outline: none;
         border: 0;
@@ -38,9 +30,7 @@
         filter: invert(1);
       }
     </style>
-    <div id="textarea-wrapper">
-      <textarea id="textarea" autofocus></textarea>
-    </div>
+    <textarea id="textarea" autofocus></textarea>
     <script src="lib/math.min.js"></script>
     <script src="popup.js"></script>
   </body>
