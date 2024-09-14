@@ -11,7 +11,7 @@ let saved = 1;
 
 function adjustHeight() {
 	textarea.style.height = '5px';
-    textarea.style.height = Math.max((textarea.scrollHeight), 25) + 'px';
+	textarea.style.height = Math.max((textarea.scrollHeight), 25) + 'px';
 }
 function setIcon(value = textarea.value) {
 	realBrowser.action.setIcon({path:'images/bulb' + (value === '' ? 'Off' : 'On') + (darkIcon ? 'Dark' : 'Light') + '.png'});
