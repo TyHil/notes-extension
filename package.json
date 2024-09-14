@@ -2,13 +2,14 @@
   "name": "Notes",
   "version": "1.0.0",
   "scripts": {
+    "package": "cd src && bestzip ../notes-extension.zip *",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
     "lint": "eslint . --fix",
     "lint:check": "eslint . --debug"
   },
   "devDependencies": {
-    "@prettier/plugin-xml": "^3.4.1",
+    "bestzip": "^2.2.1",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "prettier": "^3.2.5"
@@ -21,11 +22,7 @@
     "singleQuote": true,
     "trailingComma": "none",
     "arrowParens": "avoid",
-    "htmlWhitespaceSensitivity": "strict",
-    "plugins": [
-      "@prettier/plugin-xml"
-    ],
-    "xmlWhitespaceSensitivity": "ignore"
+    "htmlWhitespaceSensitivity": "strict"
   },
   "eslintConfig": {
     "env": {
